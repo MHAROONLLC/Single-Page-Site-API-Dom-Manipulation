@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pakistan Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #008B8B;
+            color: #fff;
+            padding: 20px;
+        }
+        #content {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            display: none; /* Initially hide the content */
+        }
+        #flag, #map {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        p {
+            margin: 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #000000;
+            border-radius: 5px;
+        }
+        .map-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #440909;
+            border: 1px solid #080808;
+            border-radius: 5px;
+        }
+        #mapLabel, #flagLabel {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        #loadDataBtn {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #000000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pakistan Information</h1>
+    </header>
+
+    <button id="loadDataBtn" onclick="loadData()">Load Data</button>
+
+    <div id="content">
+        <!-- Content will be dynamically loaded here -->
+    </div>
+
+    <script>
+        function loadData() {
+            document.getElementById('content').style.display = 'grid'; // Show the content
+
+            fetch('https://restcountries.com/v3.1/name/pakistan?fullText=true')
+                .then(response => response.json())
+                .then(data => {
+                    displayData(data[0]);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        function displayData(countryData) {
+            const contentDiv = document.getElementById('content');
+
+            // Display country name
+            const countryName = document.createElement('p');
+            countryName.textContent = `Country: ${countryData.name.common}`;
+            contentDiv.appendChild(countryName);
+
+            // Display map and flag container
+            const mapFlagContainer = document.createElement('div');
+            mapFlagContainer.className = 'map-container';
+
+            // Display flag
+            const flagLabel = document.createElement('p');
+            flagLabel.id = 'flagLabel';
+            flagLabel.textContent = 'Flag of Pakistan';
+            mapFlagContainer.appendChild(flagLabel);
+
+            const flagImg = document.createElement('img');
+            flagImg.id = 'flag';
+            flagImg.src = countryData.flags.png;
+            mapFlagContainer.appendChild(flagImg);
+
+            // Display map of Pakistan
+            const mapLabel = document.createElement('p');
+            mapLabel.id = 'mapLabel';
+            mapLabel.textContent = 'Map of Pakistan';
+            mapFlagContainer.appendChild(mapLabel);
+
+            const mapImg = document.createElement('img');
+            mapImg.id = 'map';
+            mapImg.src = 'Flag.jpeg'; // Replace with the actual map image URL
+            mapFlagContainer.appendChild(mapImg);
+
+            contentDiv.appendChild(mapFlagContainer);
+
+            // Display language
+            const languageParagraph = document.createElement('p');
+            languageParagraph.textContent = `Language: ${countryData.languages.urd.name}`;
+            contentDiv.appendChild(languageParagraph);
+
+            // Display currency
+            const currencyParagraph = document.createElement('p');
+            currencyParagraph.textContent = `Currency: ${countryData.currencies.PKR.name}`;
+            contentDiv.appendChild(currencyParagraph);
+
+            // Display capital
+            const capitalParagraph = document.createElement('p');
+            capitalParagraph.textContent = `Capital: ${countryData.capital}`;
+            contentDiv.appendChild(capitalParagraph);
+
+            // Display continent
+            const continentParagraph = document.createElement('p');
+            continentParagraph.textContent = `Continent: ${countryData.region}`;
+            contentDiv.appendChild(continentParagraph);
+        }
+    </script>
+</body>
+</html>
